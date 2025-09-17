@@ -1,0 +1,42 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+ 
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+ 
+# Visual Studio cache files
+.vs/
+ 
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nugetprops
+*.nuget.targets
+ 
+# Others
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.dbmdl
+*.bak
+*.tmp
+*.tmp_proj
+*.log
+ 
+# OS generated files
+.DS_Store
+Thumbs.db
