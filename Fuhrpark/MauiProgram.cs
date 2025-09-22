@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Fuhrpark.Service;
+using Fuhrpark.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Fuhrpark;
 
@@ -14,6 +16,11 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+
+        // Dependency Injection für Services und ViewModels registrieren
+        builder.Services.AddSingleton<DatabaseService>();
+        builder.Services.AddSingleton<FleetViewModel>();
+        builder.Services.AddSingleton<HomePage>();
 
 #if DEBUG
         builder.Logging.AddDebug();
