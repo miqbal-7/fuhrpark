@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Fuhrpark.ViewModels"
+             Shell.NavBarIsVisible="False"
+             xmlns:model="clr-namespace:Fuhrpark.Models"
+             x:Class="Fuhrpark.HomePage"
+             x:DataType="viewModels:FleetViewModel"
+             x:Name="Home">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*" Padding="10" RowSpacing="10">
+
+        <!-- Suchbereich -->
+        <Frame Grid.Row="0" BorderColor="LightGray" CornerRadius="10" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Fahrzeugsuche" FontAttributes="Bold" FontSize="Medium"/>
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                    <Entry Grid.Column="0" Placeholder="Suchbegriff eingeben..." Text="{Binding SearchText}"/>
+                    <Picker Grid.Column="1" SelectedItem="{Binding SearchCriteria}" WidthRequest="120">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Kennzeichen</x:String>
+                                <x:String>Klasse</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+                <Button Text="Suchen" Command="{Binding SearchCommand}"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Fahrzeugliste -->
+        <Label Grid.Row="1" Text="Fahrzeugliste" FontSize="Large" FontAttributes="Bold"/>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Vehicles}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:Vehicle}">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Löschen"
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:FleetViewModel}}, Path=DeleteVehicleCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Frame Padding="10" Margin="0,5" BorderColor="Gainsboro" CornerRadius="5">
+                            <VerticalStackLayout>
+                                <Label FontSize="Medium" FontAttributes="Bold">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Manufacturer}"/>
+                                            <Span Text=" "/>
+                                            <Span Text="{Binding Model}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Text="{Binding LicensePlate, StringFormat='Kennzeichen: {0}'}"/>
+                                <Label Text="{Binding VehicleClass, StringFormat='Klasse: {0}'}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Fahrzeug hinzufügen -->
+        <Frame Grid.Row="3" BorderColor="LightGray" CornerRadius="10" Padding="15">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
+                <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
+                <Entry Placeholder="Hersteller" Text="{Binding NewManufacturer}"/>
+                <Entry Placeholder="Modell" Text="{Binding NewModel}"/>
+                <Entry Placeholder="Fahrzeugklasse (PKW, LKW, ...)" Text="{Binding NewVehicleClass}"/>
+                <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+
+</ContentPage>
