@@ -1,5 +1,10 @@
-﻿using Fuhrpark.Models;
+﻿using CommunityToolkit.Maui;
+using Fuhrpark.View;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
+using Fuhrpark.Models;
 using Fuhrpark.Service;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Fuhrpark.ViewModels
 {
@@ -17,6 +23,7 @@ namespace Fuhrpark.ViewModels
         private readonly DatabaseService _databaseService;
         private ObservableCollection<Vehicle> _vehicles;
         private string _searchText;
+        private string _vehicleType = "PKW";
         private string _searchCriteria = "Kennzeichen";
 
         //Eigenschaften für das Hinzufügen eines neuen Fahrzeugs
@@ -37,6 +44,12 @@ namespace Fuhrpark.ViewModels
             set { _searchText = value; OnPropertyChanged(); }
         }
 
+        public string VehicleType
+        {
+            get => _vehicleType;
+            set { _vehicleType = value; OnPropertyChanged(); }
+        }
+
         public string SearchCriteria
         {
             get => _searchCriteria;
@@ -55,9 +68,11 @@ namespace Fuhrpark.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand LoadVehiclesCommand { get; }
 
-        public FleetViewModel(DatabaseService databaseService)
+        private readonly IPopupService _popupService;
+        public FleetViewModel(DatabaseService databaseService, IPopupService popupService)
         {
             _databaseService = databaseService;
+            _popupService = popupService;
             Vehicles = new ObservableCollection<Vehicle>();
 
             AddVehicleCommand = new Command(async () => await AddVehicleAsync());
@@ -81,9 +96,18 @@ namespace Fuhrpark.ViewModels
         private async Task AddVehicleAsync()
         {
             if (string.IsNullOrWhiteSpace(NewLicensePlate) || string.IsNullOrWhiteSpace(NewManufacturer) ||
-                string.IsNullOrWhiteSpace(NewModel) || string.IsNullOrWhiteSpace(NewVehicleClass))
+                string.IsNullOrWhiteSpace(NewModel) || string.IsNullOrWhiteSpace(VehicleType))
             {
                 return;
+            }
+
+            if (VehicleType == "PKW")
+            {
+                NewVehicleClass = "PKW";
+            }
+            else if (VehicleType == "LKW")
+            {
+                NewVehicleClass = "LKW";
             }
 
             var newVehicle = new Vehicle
@@ -95,13 +119,15 @@ namespace Fuhrpark.ViewModels
             };
 
             await _databaseService.AddVehicleAsync(newVehicle);
-            await LoadVehiclesAsync(); // Liste neu laden
 
             // Felder leeren
             NewLicensePlate = string.Empty;
             NewManufacturer = string.Empty;
             NewModel = string.Empty;
             NewVehicleClass = string.Empty;
+
+            await _popupService.ClosePopupAsync();
+            await LoadVehiclesAsync(); // Liste neu laden
         }
 
         private async Task DeleteVehicleAsync(Vehicle vehicle)

@@ -34,7 +34,7 @@
         <CollectionView Grid.Row="2" ItemsSource="{Binding Vehicles}" SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:Vehicle}">
-                    <SwipeView>
+                    <SwipeView VerticalOptions="Center">
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem Text="Löschen"
@@ -65,17 +65,7 @@
         </CollectionView>
 
         <!-- Fahrzeug hinzufügen -->
-        <Border Grid.Row="3" Stroke="LightGray" StrokeShape="10" Padding="15">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
-                <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
-                <Entry Placeholder="Hersteller" Text="{Binding NewManufacturer}"/>
-                <Entry Placeholder="Modell" Text="{Binding NewModel}"/>
-                <Entry Placeholder="Fahrzeugklasse (PKW, LKW, ...)" Text="{Binding NewVehicleClass}"/>
-                <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
-            </VerticalStackLayout>
-        </Border>
-
+        <Button Grid.Row="3" Text="Fahrzeug hinzufügen" FontSize="25" Command="{Binding ShowPopupButtonCommand, Source={x:Reference Home}}"/>
     </Grid>
 
 </ContentPage>
