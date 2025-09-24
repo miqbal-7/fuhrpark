@@ -10,7 +10,7 @@
     <Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*" Padding="10" RowSpacing="10">
 
         <!-- Suchbereich -->
-        <Frame Grid.Row="0" BorderColor="LightGray" CornerRadius="10" Padding="10">
+        <Border Grid.Row="0" Stroke="LightGray" StrokeShape="10" Padding="10">
             <VerticalStackLayout Spacing="10">
                 <Label Text="Fahrzeugsuche" FontAttributes="Bold" FontSize="Medium"/>
                 <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
@@ -26,7 +26,7 @@
                 </Grid>
                 <Button Text="Suchen" Command="{Binding SearchCommand}"/>
             </VerticalStackLayout>
-        </Frame>
+        </Border>
 
         <!-- Fahrzeugliste -->
         <Label Grid.Row="1" Text="Fahrzeugliste" FontSize="Large" FontAttributes="Bold"/>
@@ -65,7 +65,7 @@
         </CollectionView>
 
         <!-- Fahrzeug hinzufügen -->
-        <Frame Grid.Row="3" BorderColor="LightGray" CornerRadius="10" Padding="15">
+        <Border Grid.Row="3" Stroke="LightGray" StrokeShape="10" Padding="15">
             <VerticalStackLayout Spacing="5">
                 <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
                 <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
@@ -74,7 +74,7 @@
                 <Entry Placeholder="Fahrzeugklasse (PKW, LKW, ...)" Text="{Binding NewVehicleClass}"/>
                 <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
             </VerticalStackLayout>
-        </Frame>
+        </Border>
 
     </Grid>
 
