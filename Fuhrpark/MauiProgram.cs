@@ -1,6 +1,8 @@
 ﻿using Fuhrpark.Service;
 using Fuhrpark.ViewModels;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
+using Fuhrpark.View;
 
 namespace Fuhrpark;
 
@@ -11,6 +13,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -21,6 +24,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<DatabaseService>();
         builder.Services.AddSingleton<FleetViewModel>();
         builder.Services.AddSingleton<HomePage>();
+
+        builder.Services.AddTransientPopup<AddVehicleView, FleetViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

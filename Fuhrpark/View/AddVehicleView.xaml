@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Fuhrpark.ViewModels"
+             xmlns:model="clr-namespace:Fuhrpark.Models"
+             x:DataType="viewModels:FleetViewModel"
+             Color="Transparent"
+             x:Class="Fuhrpark.View.AddVehicleView"
+             x:Name="AddVehicle">
+    <Border x:Name="PopupContent" BackgroundColor="White" StrokeShape="10" Padding="15">
+        <VerticalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
+            <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
+            <Entry Placeholder="Hersteller" Text="{Binding NewManufacturer}"/>
+            <Entry Placeholder="Modell" Text="{Binding NewModel}"/>
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                <Label Grid.Column="0" Text="Fahrzeugklasse auswählen" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                <Picker Grid.Column="1" SelectedItem="{Binding VehicleType}" WidthRequest="120">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>PKW</x:String>
+                            <x:String>LKW</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </Grid>
+            <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
+        </VerticalStackLayout>
+    </Border>
+</mct:Popup>
