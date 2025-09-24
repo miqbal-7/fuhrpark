@@ -64,6 +64,8 @@ namespace Fuhrpark.ViewModels
             DeleteVehicleCommand = new Command<Vehicle>(async (vehicle) => await DeleteVehicleAsync(vehicle));
             SearchCommand = new Command(async () => await SearchVehiclesAsync());
             LoadVehiclesCommand = new Command(async () => await LoadVehiclesAsync());
+
+            _ = LoadVehiclesAsync();
         }
 
         public async Task LoadVehiclesAsync()

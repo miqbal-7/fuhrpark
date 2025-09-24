@@ -16,7 +16,7 @@ namespace Fuhrpark.Service
     public class DatabaseService
     {
         //ConnectionString für die Datenbank
-        private readonly string _connectionString = "server=localhost;database=fuhrpark;user=root;password=;";
+        private readonly string _connectionString = "server=127.0.0.1;port=3306;database=fuhrpark;user=root;password=;";
 
         private MySqlConnection GetConnection()
         {
@@ -35,7 +35,7 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT Id, LicensePlate, Manufacturer, Model, VehicleClass FROM Vehicles";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen";
                     using (var cmd = new MySqlCommand(query, conn))
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -43,11 +43,11 @@ namespace Fuhrpark.Service
                         {
                             vehicles.Add(new Vehicle
                             {
-                                Id = reader.GetInt32("Id"),
-                                LicensePlate = reader.GetString("LicensePlate"),
-                                Manufacturer = reader.GetString("Manufacturer"),
-                                Model = reader.GetString("Model"),
-                                VehicleClass = reader.GetString("VehicleClass")
+                                Id = reader.GetInt32("id"),
+                                LicensePlate = reader.GetString("kennzeichen"),
+                                Manufacturer = reader.GetString("hersteller"),
+                                Model = reader.GetString("modell"),
+                                VehicleClass = reader.GetString("typ")
                             });
                         }
                     }
@@ -70,13 +70,13 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "INSERT INTO Vehicles (LicensePlate, Manufacturer, Model, VehicleClass) VALUES (@LicensePlate, @Manufacturer, @Model, @VehicleClass)";
+                    var query = "INSERT INTO wagen (kennzeichen, hersteller, modell, typ) VALUES (@kennzeichen, @hersteller, @modell, @typ)";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@LicensePlate", vehicle.LicensePlate);
-                        cmd.Parameters.AddWithValue("@Manufacturer", vehicle.Manufacturer);
-                        cmd.Parameters.AddWithValue("@Model", vehicle.Model);
-                        cmd.Parameters.AddWithValue("@VehicleClass", vehicle.VehicleClass);
+                        cmd.Parameters.AddWithValue("@kennzeichen", vehicle.LicensePlate);
+                        cmd.Parameters.AddWithValue("@hersteller", vehicle.Manufacturer);
+                        cmd.Parameters.AddWithValue("@modell", vehicle.Model);
+                        cmd.Parameters.AddWithValue("@typ", vehicle.VehicleClass);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -97,10 +97,10 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "DELETE FROM Vehicles WHERE Id = @Id";
+                    var query = "DELETE FROM wagen WHERE id = @id";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Id", vehicleId);
+                        cmd.Parameters.AddWithValue("@id", vehicleId);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -122,21 +122,21 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT Id, LicensePlate, Manufacturer, Model, VehicleClass FROM Vehicles WHERE VehicleClass LIKE @VehicleClass";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen WHERE typ LIKE @typ";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@VehicleClass", $"%{vehicleClass}%");
+                        cmd.Parameters.AddWithValue("@typ", $"%{vehicleClass}%");
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
                                 vehicles.Add(new Vehicle
                                 {
-                                    Id = reader.GetInt32("Id"),
-                                    LicensePlate = reader.GetString("LicensePlate"),
-                                    Manufacturer = reader.GetString("Manufacturer"),
-                                    Model = reader.GetString("Model"),
-                                    VehicleClass = reader.GetString("VehicleClass")
+                                    Id = reader.GetInt32("id"),
+                                    LicensePlate = reader.GetString("kennzeichen"),
+                                    Manufacturer = reader.GetString("hersteller"),
+                                    Model = reader.GetString("modell"),
+                                    VehicleClass = reader.GetString("typ")
                                 });
                             }
                         }
@@ -161,21 +161,21 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT Id, LicensePlate, Manufacturer, Model, VehicleClass FROM Vehicles WHERE LicensePlate LIKE @LicensePlate";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen WHERE kennzeichen LIKE @kennzeichen";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@LicensePlate", $"%{licensePlate}%");
+                        cmd.Parameters.AddWithValue("@kennzeichen", $"%{licensePlate}%");
                         using (var reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
                                 vehicles.Add(new Vehicle
                                 {
-                                    Id = reader.GetInt32("Id"),
-                                    LicensePlate = reader.GetString("LicensePlate"),
-                                    Manufacturer = reader.GetString("Manufacturer"),
-                                    Model = reader.GetString("Model"),
-                                    VehicleClass = reader.GetString("VehicleClass")
+                                    Id = reader.GetInt32("id"),
+                                    LicensePlate = reader.GetString("kennzeichen"),
+                                    Manufacturer = reader.GetString("hersteller"),
+                                    Model = reader.GetString("modell"),
+                                    VehicleClass = reader.GetString("typ")
                                 });
                             }
                         }
