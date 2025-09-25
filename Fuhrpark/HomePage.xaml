@@ -56,6 +56,9 @@
                                     </Label.FormattedText>
                                 </Label>
                                 <Label Text="{Binding LicensePlate, StringFormat='Kennzeichen: {0}'}"/>
+                                <Label Text="{Binding Mileage, StringFormat='Kilometerstand: {0}'}"/>
+                                <Label Text="{Binding YearOfManufacture, StringFormat='Baujahr: {0}'}"/>
+                                <Label Text="{Binding State, StringFormat='Status: {0}'}"/>
                                 <Label Text="{Binding VehicleClass, StringFormat='Klasse: {0}'}"/>
                             </VerticalStackLayout>
                         </Border>
