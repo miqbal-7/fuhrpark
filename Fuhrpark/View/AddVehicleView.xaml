@@ -8,24 +8,29 @@
              Color="Transparent"
              x:Class="Fuhrpark.View.AddVehicleView"
              x:Name="AddVehicle">
-    <Border x:Name="PopupContent" BackgroundColor="White" StrokeShape="10" Padding="15">
-        <VerticalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
-            <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
-            <Entry Placeholder="Hersteller" Text="{Binding NewManufacturer}"/>
-            <Entry Placeholder="Modell" Text="{Binding NewModel}"/>
-            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-                <Label Grid.Column="0" Text="Fahrzeugklasse auswählen" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                <Picker Grid.Column="1" SelectedItem="{Binding VehicleType}" WidthRequest="120">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>PKW</x:String>
-                            <x:String>LKW</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-            </Grid>
-            <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
-        </VerticalStackLayout>
-    </Border>
+    <VerticalStackLayout x:Name="PopupContent" VerticalOptions="Fill">
+        <Border BackgroundColor="White" StrokeShape="10" Padding="15">
+            <VerticalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
+                <Entry Placeholder="Kennzeichen" Text="{Binding NewLicensePlate}"/>
+                <Entry Placeholder="Hersteller" Text="{Binding NewManufacturer}"/>
+                <Entry Placeholder="Modell" Text="{Binding NewModel}"/>
+                <Entry Placeholder="Kilometerstand" Text="{Binding NewMileage}"/>
+                <Entry Placeholder="Baujahr" Text="{Binding NewYearOfManufacture}"/>
+                <Entry Placeholder="Tonner" Text="{Binding NewTon}" IsVisible="{Binding IsTruckVehicle}"/>
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                    <Label Grid.Column="0" Text="Fahrzeugklasse auswählen" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Picker Grid.Column="1" SelectedItem="{Binding VehicleType}" WidthRequest="120">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>PKW</x:String>
+                                <x:String>LKW</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+                <Button Text="Fahrzeug hinzufügen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
 </mct:Popup>

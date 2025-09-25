@@ -35,7 +35,7 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, baujahr, kilometer, tonnen, typ, status FROM wagen";
                     using (var cmd = new MySqlCommand(query, conn))
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -47,7 +47,11 @@ namespace Fuhrpark.Service
                                 LicensePlate = reader.GetString("kennzeichen"),
                                 Manufacturer = reader.GetString("hersteller"),
                                 Model = reader.GetString("modell"),
-                                VehicleClass = reader.GetString("typ")
+                                YearOfManufacture = await reader.IsDBNullAsync("baujahr") ? (int?)null : reader.GetInt32("baujahr"),
+                                Mileage = await reader.IsDBNullAsync("kilometer") ? (int?)null : reader.GetInt32("kilometer"),
+                                Ton = await reader.IsDBNullAsync("tonnen") ? (double?)null : reader.GetDouble("tonnen"),
+                                VehicleClass = reader.GetString("typ"),
+                                State = reader.GetString("status"),
                             });
                         }
                     }
@@ -70,13 +74,17 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "INSERT INTO wagen (kennzeichen, hersteller, modell, typ) VALUES (@kennzeichen, @hersteller, @modell, @typ)";
+                    var query = "INSERT INTO wagen (kennzeichen, hersteller, modell, baujahr, kilometer, tonnen, typ, status) VALUES (@kennzeichen, @hersteller, @modell, @baujahr, @kilometer, @tonnen, @typ, @status)";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@kennzeichen", vehicle.LicensePlate);
                         cmd.Parameters.AddWithValue("@hersteller", vehicle.Manufacturer);
                         cmd.Parameters.AddWithValue("@modell", vehicle.Model);
+                        cmd.Parameters.AddWithValue("@baujahr", vehicle.YearOfManufacture ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@kilometer", vehicle.Mileage ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@tonnen", vehicle.Ton ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@typ", vehicle.VehicleClass);
+                        cmd.Parameters.AddWithValue("@status", vehicle.State);
                         await cmd.ExecuteNonQueryAsync();
                     }
                 }
@@ -122,7 +130,7 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen WHERE typ LIKE @typ";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, baujahr, kilometer, tonnen, typ, status FROM wagen WHERE typ LIKE @typ";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@typ", $"%{vehicleClass}%");
@@ -136,7 +144,11 @@ namespace Fuhrpark.Service
                                     LicensePlate = reader.GetString("kennzeichen"),
                                     Manufacturer = reader.GetString("hersteller"),
                                     Model = reader.GetString("modell"),
-                                    VehicleClass = reader.GetString("typ")
+                                    YearOfManufacture = await reader.IsDBNullAsync("baujahr") ? (int?)null : reader.GetInt32("baujahr"),
+                                    Mileage = await reader.IsDBNullAsync("kilometer") ? (int?)null : reader.GetInt32("kilometer"),
+                                    Ton = await reader.IsDBNullAsync("tonnen") ? (double?)null : reader.GetDouble("tonnen"),
+                                    VehicleClass = reader.GetString("typ"),
+                                    State = reader.GetString("status"),
                                 });
                             }
                         }
@@ -161,7 +173,7 @@ namespace Fuhrpark.Service
                 using (var conn = GetConnection())
                 {
                     await conn.OpenAsync();
-                    var query = "SELECT id, kennzeichen, hersteller, modell, typ FROM wagen WHERE kennzeichen LIKE @kennzeichen";
+                    var query = "SELECT id, kennzeichen, hersteller, modell, baujahr, kilometer, tonnen, typ, status FROM wagen WHERE kennzeichen LIKE @kennzeichen";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@kennzeichen", $"%{licensePlate}%");
@@ -175,7 +187,11 @@ namespace Fuhrpark.Service
                                     LicensePlate = reader.GetString("kennzeichen"),
                                     Manufacturer = reader.GetString("hersteller"),
                                     Model = reader.GetString("modell"),
-                                    VehicleClass = reader.GetString("typ")
+                                    YearOfManufacture = await reader.IsDBNullAsync("baujahr") ? (int?)null : reader.GetInt32("baujahr"),
+                                    Mileage = await reader.IsDBNullAsync("kilometer") ? (int?)null : reader.GetInt32("kilometer"),
+                                    Ton = await reader.IsDBNullAsync("tonnen") ? (double?)null : reader.GetDouble("tonnen"),
+                                    VehicleClass = reader.GetString("typ"),
+                                    State = reader.GetString("status"),
                                 });
                             }
                         }

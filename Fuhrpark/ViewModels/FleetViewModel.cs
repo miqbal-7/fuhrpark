@@ -25,12 +25,17 @@ namespace Fuhrpark.ViewModels
         private string _searchText;
         private string _vehicleType = "PKW";
         private string _searchCriteria = "Kennzeichen";
+        private bool _isTruckVehicle;
 
         //Eigenschaften für das Hinzufügen eines neuen Fahrzeugs
         private string _newLicensePlate;
         private string _newManufacturer;
         private string _newModel;
+        private int? _newMileage;
+        private int? _newYearOfManufacture;
+        private double? _newTon;
         private string _newVehicleClass;
+        private string _newState;
 
         public ObservableCollection<Vehicle> Vehicles
         {
@@ -47,7 +52,7 @@ namespace Fuhrpark.ViewModels
         public string VehicleType
         {
             get => _vehicleType;
-            set { _vehicleType = value; OnPropertyChanged(); }
+            set { _vehicleType = value; OnPropertyChanged(); IsTruckVehicle = (value == "LKW"); }
         }
 
         public string SearchCriteria
@@ -61,6 +66,19 @@ namespace Fuhrpark.ViewModels
         public string NewManufacturer { get => _newManufacturer; set { _newManufacturer = value; OnPropertyChanged(); } }
         public string NewModel { get => _newModel; set { _newModel = value; OnPropertyChanged(); } }
         public string NewVehicleClass { get => _newVehicleClass; set { _newVehicleClass = value; OnPropertyChanged(); } }
+        public int? NewMileage { get => _newMileage; set { _newMileage = value; OnPropertyChanged(); } }
+        public int? NewYearOfManufacture { get => _newYearOfManufacture; set { _newYearOfManufacture = value; OnPropertyChanged(); } }
+        public double? NewTon { get => _newTon; set { _newTon = value; OnPropertyChanged(); } }
+        public string NewState { get => _newState; set {  _newState = value; OnPropertyChanged(); } }
+        public bool IsTruckVehicle
+        {
+            get => _isTruckVehicle;
+            set
+            {
+                _isTruckVehicle = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public ICommand AddVehicleCommand { get; }
@@ -115,7 +133,11 @@ namespace Fuhrpark.ViewModels
                 LicensePlate = NewLicensePlate,
                 Manufacturer = NewManufacturer,
                 Model = NewModel,
-                VehicleClass = NewVehicleClass
+                Mileage = NewMileage,
+                YearOfManufacture = NewYearOfManufacture,
+                Ton = NewTon,
+                VehicleClass = NewVehicleClass,
+                State = NewState
             };
 
             await _databaseService.AddVehicleAsync(newVehicle);
@@ -124,7 +146,11 @@ namespace Fuhrpark.ViewModels
             NewLicensePlate = string.Empty;
             NewManufacturer = string.Empty;
             NewModel = string.Empty;
+            NewMileage = null;
+            NewYearOfManufacture = null;
+            NewTon = null;
             NewVehicleClass = string.Empty;
+            NewState = string.Empty;
 
             await _popupService.ClosePopupAsync();
             await LoadVehiclesAsync(); // Liste neu laden

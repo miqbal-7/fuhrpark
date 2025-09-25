@@ -13,5 +13,9 @@ namespace Fuhrpark.Models
         public string Manufacturer { get; set; }
         public string Model { get; set; }
         public string VehicleClass { get; set; }
+        public int? Mileage { get; set; }
+        public double? Ton { get; set; }
+        public int? YearOfManufacture { get; set; }
+        public string State { get; set; }
     }
 }
