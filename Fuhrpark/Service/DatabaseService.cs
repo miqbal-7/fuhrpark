@@ -204,6 +204,33 @@ namespace Fuhrpark.Service
             }
             return vehicles;
         }
+
+        public async Task UpdateVehicleStateAsync(int vehicleId, string newState)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    await conn.OpenAsync();
+
+                    // Die SQL-Abfrage aktualisiert nur die 'state'-Spalte
+                    var query = "UPDATE wagen SET status = @status WHERE id = @id";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        // Nur die zwei benötigten Parameter hinzufügen
+                        cmd.Parameters.AddWithValue("@status", newState);
+                        cmd.Parameters.AddWithValue("@id", vehicleId);
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Fehler beim Aktualisieren des Status: {ex.Message}");
+            }
+        }
     }
 
 }

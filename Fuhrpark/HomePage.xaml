@@ -58,7 +58,16 @@
                                 <Label Text="{Binding LicensePlate, StringFormat='Kennzeichen: {0}'}"/>
                                 <Label Text="{Binding Mileage, StringFormat='Kilometerstand: {0}'}"/>
                                 <Label Text="{Binding YearOfManufacture, StringFormat='Baujahr: {0}'}"/>
-                                <Label Text="{Binding State, StringFormat='Status: {0}'}"/>
+                                <Picker SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type viewModels:FleetViewModel}}, Path=VehicleState}" 
+                                        WidthRequest="120" HorizontalOptions="Start" BindingContextChanged="StatePicker_BindingContextChanged">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>available</x:String>
+                                            <x:String>Gemietet</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                                <Label Text="{Binding Ton, StringFormat='Tonner: {0}'}" IsVisible="True"/> 
                                 <Label Text="{Binding VehicleClass, StringFormat='Klasse: {0}'}"/>
                             </VerticalStackLayout>
                         </Border>

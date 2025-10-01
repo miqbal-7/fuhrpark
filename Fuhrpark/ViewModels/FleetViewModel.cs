@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Maui;
-using Fuhrpark.View;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Fuhrpark.Models;
 using Fuhrpark.Service;
+using Fuhrpark.View;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
@@ -14,11 +17,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Fuhrpark.ViewModels
 {
-    public class FleetViewModel : INotifyPropertyChanged
+    public partial class FleetViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
         private ObservableCollection<Vehicle> _vehicles;
@@ -35,7 +37,8 @@ namespace Fuhrpark.ViewModels
         private int? _newYearOfManufacture;
         private double? _newTon;
         private string _newVehicleClass;
-        private string _newState;
+        private string _newState = "available";
+        private object Test;
 
         public ObservableCollection<Vehicle> Vehicles
         {
@@ -53,6 +56,12 @@ namespace Fuhrpark.ViewModels
         {
             get => _vehicleType;
             set { _vehicleType = value; OnPropertyChanged(); IsTruckVehicle = (value == "LKW"); }
+        }
+
+        public string VehicleState
+        {
+            get => _newState;
+            set { _newState = value; OnPropertyChanged(); }
         }
 
         public string SearchCriteria
@@ -85,6 +94,7 @@ namespace Fuhrpark.ViewModels
         public ICommand DeleteVehicleCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand LoadVehiclesCommand { get; }
+        public ICommand UpdateStateCommand { get; }
 
         private readonly IPopupService _popupService;
         public FleetViewModel(DatabaseService databaseService, IPopupService popupService)
@@ -154,6 +164,14 @@ namespace Fuhrpark.ViewModels
 
             await _popupService.ClosePopupAsync();
             await LoadVehiclesAsync(); // Liste neu laden
+        }
+
+        public async Task UpdateVehicleState(Vehicle vehicle)
+        {
+            if(vehicle == null) { return; }
+            VehicleState = vehicle.State; 
+            await _databaseService.UpdateVehicleStateAsync(vehicle.Id, VehicleState);
+            //await LoadVehiclesAsync(); // Liste neu laden
         }
 
         private async Task DeleteVehicleAsync(Vehicle vehicle)
