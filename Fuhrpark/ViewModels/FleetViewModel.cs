@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Maui;
-using Fuhrpark.View;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Fuhrpark.Models;
 using Fuhrpark.Service;
+using Fuhrpark.View;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
@@ -14,11 +17,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Fuhrpark.ViewModels
 {
-    public class FleetViewModel : INotifyPropertyChanged
+    public partial class FleetViewModel : INotifyPropertyChanged
     {
         private readonly DatabaseService _databaseService;
         private ObservableCollection<Vehicle> _vehicles;
@@ -26,6 +28,7 @@ namespace Fuhrpark.ViewModels
         private string _vehicleType = "PKW";
         private string _searchCriteria = "Kennzeichen";
         private bool _isTruckVehicle;
+        public List<double> TonnageOptions { get; } = new List<double> { 7.5, 12, 40 };
 
         //Eigenschaften für das Hinzufügen eines neuen Fahrzeugs
         private string _newLicensePlate;
@@ -33,9 +36,9 @@ namespace Fuhrpark.ViewModels
         private string _newModel;
         private int? _newMileage;
         private int? _newYearOfManufacture;
-        private double? _newTon;
+        private double? _newTon = 7.5;
         private string _newVehicleClass;
-        private string _newState;
+        private string _newState = "Verfügbar";
 
         public ObservableCollection<Vehicle> Vehicles
         {
@@ -53,6 +56,12 @@ namespace Fuhrpark.ViewModels
         {
             get => _vehicleType;
             set { _vehicleType = value; OnPropertyChanged(); IsTruckVehicle = (value == "LKW"); }
+        }
+
+        public string VehicleState
+        {
+            get => _newState;
+            set { _newState = value; OnPropertyChanged(); }
         }
 
         public string SearchCriteria
@@ -85,6 +94,7 @@ namespace Fuhrpark.ViewModels
         public ICommand DeleteVehicleCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand LoadVehiclesCommand { get; }
+        public ICommand UpdateStateCommand { get; }
 
         private readonly IPopupService _popupService;
         public FleetViewModel(DatabaseService databaseService, IPopupService popupService)
@@ -96,6 +106,7 @@ namespace Fuhrpark.ViewModels
             AddVehicleCommand = new Command(async () => await AddVehicleAsync());
             DeleteVehicleCommand = new Command<Vehicle>(async (vehicle) => await DeleteVehicleAsync(vehicle));
             SearchCommand = new Command(async () => await SearchVehiclesAsync());
+            UpdateStateCommand = new Command<Vehicle>(async (vehicle) => await UpdateVehicleState(vehicle));
             LoadVehiclesCommand = new Command(async () => await LoadVehiclesAsync());
 
             _ = LoadVehiclesAsync();
@@ -116,6 +127,7 @@ namespace Fuhrpark.ViewModels
             if (string.IsNullOrWhiteSpace(NewLicensePlate) || string.IsNullOrWhiteSpace(NewManufacturer) ||
                 string.IsNullOrWhiteSpace(NewModel) || string.IsNullOrWhiteSpace(VehicleType))
             {
+                await App.Current.MainPage.DisplayAlert("Eingabe fehlt", "Bitte füllen Sie alle Pflichtfelder aus (Kennzeichen, Hersteller, Modell, Typ).", "OK");
                 return;
             }
 
@@ -154,6 +166,29 @@ namespace Fuhrpark.ViewModels
 
             await _popupService.ClosePopupAsync();
             await LoadVehiclesAsync(); // Liste neu laden
+        }
+
+        public async Task UpdateVehicleState(Vehicle vehicle)
+        {
+            if (vehicle == null) { return; }
+
+            string currentStatus = await _databaseService.GetCurrentVehicleStateAsync(vehicle.Id);
+
+            string newStatus;
+            const string verfügbar = "Verfügbar";
+            const string gemietet = "Gemietet";
+
+            if (currentStatus == verfügbar)
+            {
+                newStatus = gemietet;
+            }
+            else
+            {
+                newStatus = verfügbar;
+            }
+
+            await _databaseService.UpdateVehicleStateAsync(vehicle.Id, newStatus);
+            await LoadVehiclesAsync();
         }
 
         private async Task DeleteVehicleAsync(Vehicle vehicle)

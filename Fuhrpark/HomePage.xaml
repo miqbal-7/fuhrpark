@@ -10,12 +10,12 @@
     <Grid RowDefinitions="Auto, Auto, *, Auto" ColumnDefinitions="*" Padding="10" RowSpacing="10">
 
         <!-- Suchbereich -->
-        <Border Grid.Row="0" Stroke="LightGray" StrokeShape="10" Padding="10">
+        <Border Grid.Row="0" Stroke="Gray" StrokeShape="10" Padding="10">
             <VerticalStackLayout Spacing="10">
                 <Label Text="Fahrzeugsuche" FontAttributes="Bold" FontSize="Medium"/>
                 <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-                    <Entry Grid.Column="0" Placeholder="Suchbegriff eingeben..." Text="{Binding SearchText}"/>
-                    <Picker Grid.Column="1" SelectedItem="{Binding SearchCriteria}" WidthRequest="120">
+                    <Entry Grid.Column="0" Placeholder="Suchbegriff eingeben..." PlaceholderColor="Gray" Text="{Binding SearchText}"/>
+                    <Picker Grid.Column="1" SelectedItem="{Binding SearchCriteria}" WidthRequest="140">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Kennzeichen</x:String>
@@ -24,7 +24,7 @@
                         </Picker.ItemsSource>
                     </Picker>
                 </Grid>
-                <Button Text="Suchen" Command="{Binding SearchCommand}"/>
+                <Button Text="Suchen" BackgroundColor="MediumSeaGreen" Command="{Binding SearchCommand}"/>
             </VerticalStackLayout>
         </Border>
 
@@ -37,14 +37,19 @@
                     <SwipeView VerticalOptions="Center">
                         <SwipeView.RightItems>
                             <SwipeItems>
-                                <SwipeItem Text="Löschen"
+                                <SwipeItem Text="Löschen" IconImageSource="deletevehicle.png"
                                            BackgroundColor="Red"
                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:FleetViewModel}}, Path=DeleteVehicleCommand}"
+                                           CommandParameter="{Binding .}"/>
+
+                                <SwipeItem Text="Status" IconImageSource="editstate.png"
+                                           BackgroundColor="LightYellow"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:FleetViewModel}}, Path=UpdateStateCommand}"
                                            CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
 
-                        <Border Padding="10" Margin="0,5" Stroke="Gainsboro" StrokeShape="5">
+                        <Border Padding="10" Margin="0,5" Stroke="LightGray" StrokeShape="5">
                             <VerticalStackLayout>
                                 <Label FontSize="Medium" FontAttributes="Bold">
                                     <Label.FormattedText>
@@ -59,6 +64,7 @@
                                 <Label Text="{Binding Mileage, StringFormat='Kilometerstand: {0}'}"/>
                                 <Label Text="{Binding YearOfManufacture, StringFormat='Baujahr: {0}'}"/>
                                 <Label Text="{Binding State, StringFormat='Status: {0}'}"/>
+                                <Label Text="{Binding Ton, StringFormat='Tonner: {0}'}" IsVisible="{Binding isTruck}"/> 
                                 <Label Text="{Binding VehicleClass, StringFormat='Klasse: {0}'}"/>
                             </VerticalStackLayout>
                         </Border>
@@ -68,7 +74,7 @@
         </CollectionView>
 
         <!-- Fahrzeug hinzufügen -->
-        <Button Grid.Row="3" Text="Fahrzeug hinzufügen" FontSize="25" Command="{Binding ShowPopupButtonCommand, Source={x:Reference Home}}"/>
+        <Button Grid.Row="3" Text="Fahrzeug hinzufügen" FontSize="25" BackgroundColor="MediumSeaGreen" Command="{Binding ShowPopupButtonCommand, Source={x:Reference Home}}"/>
     </Grid>
 
 </ContentPage>

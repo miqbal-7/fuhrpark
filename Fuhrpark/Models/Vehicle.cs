@@ -17,5 +17,6 @@ namespace Fuhrpark.Models
         public double? Ton { get; set; }
         public int? YearOfManufacture { get; set; }
         public string State { get; set; }
+        public bool isTruck => string.Equals(VehicleClass, "LKW", StringComparison.OrdinalIgnoreCase);
     }
 }

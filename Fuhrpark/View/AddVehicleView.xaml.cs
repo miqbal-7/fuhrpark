@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Fuhrpark.Models;
 using Fuhrpark.ViewModels;
 
 namespace Fuhrpark.View;
