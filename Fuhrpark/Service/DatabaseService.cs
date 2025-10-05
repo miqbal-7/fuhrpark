@@ -231,6 +231,29 @@ namespace Fuhrpark.Service
                 Debug.WriteLine($"Fehler beim Aktualisieren des Status: {ex.Message}");
             }
         }
-    }
 
+        public async Task<string> GetCurrentVehicleStateAsync(int vehicleId)
+        {
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    await conn.OpenAsync();
+                    var query = "SELECT status FROM wagen WHERE id = @id";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", vehicleId);
+
+                        object result = await cmd.ExecuteScalarAsync();
+                        return result?.ToString() ?? string.Empty;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Fehler beim Abrufen des Status: {ex.Message}");
+                return string.Empty;
+            }
+        }
+    }
 }

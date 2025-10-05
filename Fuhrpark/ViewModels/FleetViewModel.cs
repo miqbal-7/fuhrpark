@@ -37,7 +37,7 @@ namespace Fuhrpark.ViewModels
         private int? _newYearOfManufacture;
         private double? _newTon;
         private string _newVehicleClass;
-        private string _newState = "available";
+        private string _newState = "Verfügbar";
         private object Test;
 
         public ObservableCollection<Vehicle> Vehicles
@@ -106,6 +106,7 @@ namespace Fuhrpark.ViewModels
             AddVehicleCommand = new Command(async () => await AddVehicleAsync());
             DeleteVehicleCommand = new Command<Vehicle>(async (vehicle) => await DeleteVehicleAsync(vehicle));
             SearchCommand = new Command(async () => await SearchVehiclesAsync());
+            UpdateStateCommand = new Command<Vehicle>(async (vehicle) => await UpdateVehicleState(vehicle));
             LoadVehiclesCommand = new Command(async () => await LoadVehiclesAsync());
 
             _ = LoadVehiclesAsync();
@@ -168,10 +169,25 @@ namespace Fuhrpark.ViewModels
 
         public async Task UpdateVehicleState(Vehicle vehicle)
         {
-            if(vehicle == null) { return; }
-            VehicleState = vehicle.State; 
-            await _databaseService.UpdateVehicleStateAsync(vehicle.Id, VehicleState);
-            //await LoadVehiclesAsync(); // Liste neu laden
+            if (vehicle == null) { return; }
+
+            string currentStatus = await _databaseService.GetCurrentVehicleStateAsync(vehicle.Id);
+
+            string newStatus;
+            const string verfügbar = "Verfügbar";
+            const string gemietet = "Gemietet";
+
+            if (currentStatus == verfügbar)
+            {
+                newStatus = gemietet;
+            }
+            else
+            {
+                newStatus = verfügbar;
+            }
+
+            await _databaseService.UpdateVehicleStateAsync(vehicle.Id, newStatus);
+            await LoadVehiclesAsync();
         }
 
         private async Task DeleteVehicleAsync(Vehicle vehicle)
