@@ -8,8 +8,8 @@
              Color="Transparent"
              x:Class="Fuhrpark.View.AddVehicleView"
              x:Name="AddVehicle">
-    <VerticalStackLayout x:Name="PopupContent" VerticalOptions="Fill">
-        <Border BackgroundColor="White" StrokeShape="10" Padding="15">
+    <Border x:Name="PopupBorder" BackgroundColor="White" StrokeShape="10" Padding="15">
+        <ScrollView VerticalOptions="Center" HorizontalOptions="Center">
             <VerticalStackLayout Spacing="10" VerticalOptions="Center" HorizontalOptions="Center">
                 <Label Text="Neues Fahrzeug hinzufügen" FontAttributes="Bold" FontSize="Medium"/>
                 <Entry Placeholder="Kennzeichen" PlaceholderColor="Gray" Text="{Binding NewLicensePlate}"/>
@@ -17,7 +17,10 @@
                 <Entry Placeholder="Modell" PlaceholderColor="Gray" Text="{Binding NewModel}"/>
                 <Entry Placeholder="Kilometerstand" PlaceholderColor="Gray" Text="{Binding NewMileage}"/>
                 <Entry Placeholder="Baujahr" PlaceholderColor="Gray" Text="{Binding NewYearOfManufacture}"/>
-                <Entry Placeholder="Tonner" PlaceholderColor="Gray" Text="{Binding NewTon}" IsVisible="{Binding IsTruckVehicle}"/>
+                <Picker Title="Tonner"
+                        IsVisible="{Binding IsTruckVehicle}"
+                        ItemsSource="{Binding TonnageOptions}"
+                        SelectedItem="{Binding NewTon}"/>
                 <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
                     <Label Grid.Column="0" Text="Fahrzeugklasse auswählen" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
                     <Picker Grid.Column="1" SelectedItem="{Binding VehicleType}" WidthRequest="120">
@@ -31,6 +34,6 @@
                 </Grid>
                 <Button Text="Fahrzeug hinzufügen" BackgroundColor="MediumSeaGreen" Command="{Binding AddVehicleCommand}" Margin="0,10,0,0"/>
             </VerticalStackLayout>
-        </Border>
-    </VerticalStackLayout>
+        </ScrollView>
+    </Border>
 </mct:Popup>

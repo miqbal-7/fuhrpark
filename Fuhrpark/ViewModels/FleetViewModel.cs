@@ -28,6 +28,7 @@ namespace Fuhrpark.ViewModels
         private string _vehicleType = "PKW";
         private string _searchCriteria = "Kennzeichen";
         private bool _isTruckVehicle;
+        public List<double> TonnageOptions { get; } = new List<double> { 7.5, 12, 40 };
 
         //Eigenschaften für das Hinzufügen eines neuen Fahrzeugs
         private string _newLicensePlate;
@@ -35,10 +36,9 @@ namespace Fuhrpark.ViewModels
         private string _newModel;
         private int? _newMileage;
         private int? _newYearOfManufacture;
-        private double? _newTon;
+        private double? _newTon = 7.5;
         private string _newVehicleClass;
         private string _newState = "Verfügbar";
-        private object Test;
 
         public ObservableCollection<Vehicle> Vehicles
         {
@@ -127,6 +127,7 @@ namespace Fuhrpark.ViewModels
             if (string.IsNullOrWhiteSpace(NewLicensePlate) || string.IsNullOrWhiteSpace(NewManufacturer) ||
                 string.IsNullOrWhiteSpace(NewModel) || string.IsNullOrWhiteSpace(VehicleType))
             {
+                await App.Current.MainPage.DisplayAlert("Eingabe fehlt", "Bitte füllen Sie alle Pflichtfelder aus (Kennzeichen, Hersteller, Modell, Typ).", "OK");
                 return;
             }
 
