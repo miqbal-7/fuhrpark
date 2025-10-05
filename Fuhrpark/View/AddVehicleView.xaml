@@ -17,10 +17,12 @@
                 <Entry Placeholder="Modell" PlaceholderColor="Gray" Text="{Binding NewModel}"/>
                 <Entry Placeholder="Kilometerstand" PlaceholderColor="Gray" Text="{Binding NewMileage}"/>
                 <Entry Placeholder="Baujahr" PlaceholderColor="Gray" Text="{Binding NewYearOfManufacture}"/>
-                <Picker Title="Tonner"
-                        IsVisible="{Binding IsTruckVehicle}"
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" IsVisible="{Binding IsTruckVehicle}">
+                    <Label Grid.Column="0" Text="Tonner" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                    <Picker Grid.Column="1" 
                         ItemsSource="{Binding TonnageOptions}"
                         SelectedItem="{Binding NewTon}"/>
+                </Grid>
                 <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
                     <Label Grid.Column="0" Text="Fahrzeugklasse auswählen" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
                     <Picker Grid.Column="1" SelectedItem="{Binding VehicleType}" WidthRequest="120">
